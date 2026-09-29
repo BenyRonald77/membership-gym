@@ -13,9 +13,12 @@ mengelola kelas berkuota beserta booking, dan membekukan membership sementara
 
 ## Stack
 
-- Backend: Python + Flask, SQLite (stdlib `sqlite3`)
-- QR: `segno` (murni Python, tanpa dependency) — QR berisi token unik member
-- Frontend: HTML + vanilla JS + CSS murni, tanpa build step
+- Backend: TypeScript + Next.js 14 (App Router), database SQLite via Prisma
+- QR: paket npm `qrcode` — QR SVG berisi token unik member
+- Frontend: React + Tailwind CSS (dikonversi dari vanilla JS)
+
+Versi awal memakai Python + Flask + SQLite (stdlib `sqlite3`) dengan QR via
+`segno`; dikonversi ke stack ini tanpa mengubah fitur dan aturan bisnis.
 
 ## Model Data
 
@@ -66,7 +69,7 @@ mengelola kelas berkuota beserta booking, dan membekukan membership sementara
 - [ ] Booking kelas menolak saat kuota penuh atau member tidak aktif
 - [ ] Freeze memperpanjang masa berakhir sesuai jumlah hari
 - [ ] QR unik per member dan bisa dipindai (simulasi input kode)
-- [ ] `pip install -r requirements.txt && python app.py` langsung jalan
+- [ ] `npm install && cp .env.example .env && npx prisma generate && npx prisma db push && npm run seed && npm run dev` langsung jalan
 
 ## Non-tujuan
 

@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model MembershipType {
+  id          Int          @id @default(autoincrement())
+  nama        String       @unique
+  durasiHari  Int          @map("durasi_hari")
+  harga       Int
+  memberships Membership[]
+
+  @@map("membership_types")
+}
+
+model Member {
+  id            Int          @id @default(autoincrement())
+  nama          String
+  noHp          String?      @map("no_hp")
+  kodeQr        String       @unique @map("kode_qr")
+  tanggalDaftar String       @map("tanggal_daftar")
+  memberships   Membership[]
+  bookings      ClassBooking[]
+  checkins      Checkin[]
+
+  @@map("members")
+}
+
+model Membership {
+  id               Int            @id @default(autoincrement())
+  memberId         Int            @map("member_id")
+  member           Member         @relation(fields: [memberId], references: [id])
+  membershipTypeId Int            @map("membership_type_id")
+  membershipType   MembershipType @relation(fields: [membershipTypeId], references: [id])
+  mulai            String
+  berakhir         String
+  tanggalBuat      String         @map("tanggal_buat")
+  freezes          Freeze[]
+
+  @@map("memberships")
+}
+
+model Freeze {
+  id           Int        @id @default(autoincrement())
+  membershipId Int        @map("membership_id")
+  membership   Membership @relation(fields: [membershipId], references: [id])
+  mulai        String
+  selesai      String
+  alasan       String?
+
+  @@map("freezes")
+}
+
+model GymClass {
+  id         Int            @id @default(autoincrement())
+  nama       String
+  instruktur String?
+  hari       String
+  jamMulai   String         @map("jam_mulai")
+  jamSelesai String         @map("jam_selesai")
+  kuota      Int
+  bookings   ClassBooking[]
+
+  @@map("classes")
+}
+
+model ClassBooking {
+  id       Int      @id @default(autoincrement())
+  classId  Int      @map("class_id")
+  gymClass GymClass @relation(fields: [classId], references: [id])
+  memberId Int      @map("member_id")
+  member   Member   @relation(fields: [memberId], references: [id])
+  tanggal  String
+  status   String   @default("dipesan")
+
+  @@map("class_bookings")
+  @@unique([classId, memberId, tanggal])
+}
+
+model Checkin {
+  id       Int     @id @default(autoincrement())
+  memberId Int?    @map("member_id")
+  member   Member? @relation(fields: [memberId], references: [id])
+  waktu    String
+  hasil    String
+  alasan   String?
+
+  @@map("checkins")
+}
