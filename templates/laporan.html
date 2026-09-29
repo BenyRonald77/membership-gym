@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Laporan — Membership Gym{% endblock %}
+{% block content %}
+<h1>Laporan</h1>
+<div class="cards">
+  <div class="stat"><div class="num" id="s-terima">0</div><div>Check-in diterima</div></div>
+  <div class="stat"><div class="num" id="s-tolak">0</div><div>Check-in ditolak</div></div>
+  <div class="stat"><div class="num" id="s-aktif">0</div><div>Membership aktif</div></div>
+  <div class="stat"><div class="num" id="s-habis">0</div><div>Kedaluwarsa ≤ 7 hari</div></div>
+</div>
+<h2>Membership segera / sudah kedaluwarsa</h2>
+<table id="tbl"><thead><tr>
+  <th>Member</th><th>Paket</th><th>Berakhir</th><th>Status</th>
+</tr></thead><tbody></tbody></table>
+{% endblock %}
+{% block script %}<script src="{{ url_for('static', filename='js/laporan.js') }}"></script>{% endblock %}
