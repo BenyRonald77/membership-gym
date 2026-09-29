@@ -50,6 +50,13 @@ def current_membership(member_id: int, today: date | None = None):
             return None
         d = dict(m)
         d["status"] = _status(d, conn, today)
+        if d["status"] == "dibekukan":
+            f = conn.execute(
+                "SELECT selesai FROM freezes WHERE membership_id = ?"
+                " AND mulai <= ? AND selesai >= ?"
+                " ORDER BY mulai DESC LIMIT 1",
+                (d["id"], today.isoformat(), today.isoformat())).fetchone()
+            d["freeze_selesai"] = f["selesai"] if f else None
         return d
     finally:
         conn.close()
